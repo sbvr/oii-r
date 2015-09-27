@@ -42,7 +42,7 @@ oiixtab <-function(r, c, row=FALSE, col=FALSE, stat=FALSE, chicell=FALSE, chires
          "\n\n")
 
       #chi-sq stats and ordinal stats
-      oii_association_measures(tab)
+      print(oii_association_measures(tab))
 
 
       #Goodman Kruskal Lambda

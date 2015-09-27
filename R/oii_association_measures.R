@@ -120,9 +120,9 @@ oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 	wr <- sum( rowSums(tab)^2 )
 	wc <- sum( colSums(tab)^2 )
 	if (!warnings) {
-		xsq <- suppressWarnings(chisq.test(x))
+		xsq <- suppressWarnings(chisq.test(tab))
 	} else {
-		xsq <- chisq.test(x)
+		xsq <- chisq.test(tab)
 	}
 
 	gamma <- (c - d) / (c + d)
@@ -139,27 +139,47 @@ oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 	stdError <- 1/sqrt(arg)
 	z <- gamma/stdError
 
-	cat("Chi-square-based measures of association:\n")
-	cat(paste("   Phi:                     ", format(round(phi, digits=3), nsmall=3),"\n"))
-	cat(paste("   Contingency coefficient: ", format(round(contc, digits=3), nsmall=3),"\n"))
-	cat(paste("   Cramer's V:              ", format(round(v, digits=3), nsmall=3),"\n\n"))
+	vals<-list(
+		phi=phi,
+		contingency_coefficient=contc,
+		cramersv=v,
+		pairs_total=totp,
+		pairs_concordant=c,
+		pairs_discordant=d,
+		pairs_tied_first=f,
+		pairs_tied_second=s,
+		pairs_tied_both=b,
+		minimum_dim=m,
+		n=n,
+		gamma=gamma,
+		somersd=somersd,
+		taub=taub,
+		tauc=tauc
+	)
+	class(vals)<-"oii_association_measures"
+	vals
+}
+
+print.oii_association_measures<-function(vals) {
+cat("Chi-square-based measures of association:\n")
+	cat(paste("   Phi:                     ", format(round(vals$phi, digits=3), nsmall=3),"\n"))
+	cat(paste("   Contingency coefficient: ", format(round(vals$contingency_coefficient, digits=3), nsmall=3),"\n"))
+	cat(paste("   Cramer's V:              ", format(round(vals$cramersv, digits=3), nsmall=3),"\n\n"))
 
 
 	cat("Ordinal measures of association:\n")
-	cat(paste("   Total number of pairs:  ",totp,"\n"))
-	cat(paste("   Concordant pairs:       ",c,"\n"))
-	cat(paste("   Discordant pairs:       ",d,"\n"))
-	cat(paste("   Tied on first Variable: ",f,"\n"))
-	cat(paste("   Tied on second variable:",s,"\n"))
-	cat(paste("   Tied on both variables: ",b,"\n\n"))
-	cat(paste("   Minimum Dimension:",m,"\n"))
-	cat(paste("   Total N:",n,"\n"))
-	cat(paste("   Goodman-Kruskal Gamma:", format(round(gamma, digits=3), nsmall=3),"\n"))
-	cat(paste("   Somers' d:            ", format(round(somersd, digits=3), nsmall=3),"\n"))
-	cat(paste("   Kendall's tau-b:      ", format(round(taub, digits=3), nsmall=3),"\n"))
-	cat(paste("   Stuart's tau-c:       ",  format(round(tauc, digits=3), nsmall=3),"\n"))
-
-	invisible(NULL)
+	cat(paste("   Total number of pairs:  ",vals$pairs_toal,"\n"))
+	cat(paste("   Concordant pairs:       ",vals$pairs_concordant,"\n"))
+	cat(paste("   Discordant pairs:       ",vals$pairs_discordant,"\n"))
+	cat(paste("   Tied on first Variable: ",vals$pairs_tied_first,"\n"))
+	cat(paste("   Tied on second variable:",vals$pairs_tied_second,"\n"))
+	cat(paste("   Tied on both variables: ",vals$pairs_tied_both,"\n\n"))
+	cat(paste("   Minimum Dimension:",vals$minimum_dim,"\n"))
+	cat(paste("   Total N:",vals$n,"\n"))
+	cat(paste("   Goodman-Kruskal Gamma:", format(round(vals$gamma, digits=3), nsmall=3),"\n"))
+	cat(paste("   Somers' d:            ", format(round(vals$somersd, digits=3), nsmall=3),"\n"))
+	cat(paste("   Kendall's tau-b:      ", format(round(vals$taub, digits=3), nsmall=3),"\n"))
+	cat(paste("   Stuart's tau-c:       ",  format(round(vals$tauc, digits=3), nsmall=3),"\n"))
 }
 
 
