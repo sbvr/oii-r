@@ -29,26 +29,26 @@ makeTable<-function(x,y=NULL) {
 }
 
 concordant_pairs <- function(x,y=NULL){
-	x<-makeTable(x,y)
+	tab<-makeTable(x,y)
 	## get sum(matrix values > r AND > c) 
 	## for each matrix[r, c] 
 	mat.lr <- function(r,c){ 
-		lr <- x[(r.x > r) & (c.x > c)] 
+		lr <- tab[(r.x > r) & (c.x > c)] 
 		sum(lr) 
 	} 
 
 	## get row and column index for each 
 	## matrix element 
-	r.x <- row(x) 
-	c.x <- col(x) 
+	r.x <- row(tab) 
+	c.x <- col(tab) 
 
 	## return the sum of each matrix[r, c] * sums 
 	## using mapply to sequence thru each matrix[r, c] 
-	sum(x * mapply(mat.lr, r = r.x, c = c.x)) 
+	sum(tab * mapply(mat.lr, r = r.x, c = c.x)) 
 }
 
 discordant_pairs <- function(x,y=NULL){
-	x<-makeTable(x,y)
+	tab<-makeTable(x,y)
 	## get sum(matrix values > r AND < c) 
 	## for each matrix[r, c] 
 	mat.ll <- function(r,c){ 
@@ -58,29 +58,29 @@ discordant_pairs <- function(x,y=NULL){
 
 	## get row and column index for each 
 	## matrix element 
-	r.x <- row(x) 
-	c.x <- col(x) 
+	r.x <- row(tab) 
+	c.x <- col(tab) 
 
 	## return the sum of each matrix[r, c] * sums 
 	## using mapply to sequence thru each matrix[r, c] 
-	sum(x * mapply(mat.ll, r = r.x, c = c.x)) 
+	sum(tab * mapply(mat.ll, r = r.x, c = c.x)) 
 } 
 
 # tied_both: choose 2 of every element in the matrix and sum the results
 tied_pairs <- function(x,y=NULL) {
-	tied_both<-function(x){sum(choose(x,2))}
+	tied_both<-function(tab){sum(choose(tab,2))}
 	
-	tied_first <- function(x){ 
+	tied_first <- function(tab){ 
 		mult<-function(r,c) {
 			#print(paste(r,c))
 			#print((r.x > r) & (c.x == c))
 			#print(x[(r.x > r) & (c.x == c)] ) 
 			lr <- x[(r.x == r) & (c.x > c)]
-			x[r,c]*sum(lr)
+			tab[r,c]*sum(lr)
 		}
 
-		r.x <- row(x) 
-		c.x <- col(x) 
+		r.x <- row(tab) 
+		c.x <- col(tab) 
 		#cat("r.x: ",r.x,"\n")
 		#cat("c.x: ",c.x,"\n")
 
@@ -106,19 +106,19 @@ tied_pairs <- function(x,y=NULL) {
 
 oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 	
-	x<-makeTable(x,y)
+	tab<-makeTable(x,y)
   
-	c <- concordant_pairs(x) 
-	d <- discordant_pairs(x)
-	ties<-tied_pairs(x)
+	c <- concordant_pairs(tab) 
+	d <- discordant_pairs(tab)
+	ties<-tied_pairs(tab)
 	b <- ties$both
 	f <- ties$first
 	s <- ties$second
 	totp <- c + d + b + f + s
-	n <- sum(x)
-	m <- min(dim(x))
-	wr <- sum( rowSums(x)^2 )
-	wc <- sum( colSums(x)^2 )
+	n <- sum(tab)
+	m <- min(dim(tab))
+	wr <- sum( rowSums(tab)^2 )
+	wc <- sum( colSums(tab)^2 )
 	if (!warnings) {
 		xsq <- suppressWarnings(chisq.test(x))
 	} else {
@@ -128,8 +128,6 @@ oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 	gamma <- (c - d) / (c + d)
 	somersd <- (c - d) / (c + d + s)
 	taub <- (c - d) / sqrt((c + d + s) * (c + d + f))
-	# taubn <- (c - d) / (sqrt( (n^2 - wr) * (n^2 - wc) ) )
-	# taubn2 <- (c - d) / (sqrt( (totp - f) * (totp - s)) )
 	tauc <- ( 2 * m * (c - d) ) / ( n^2 * (m - 1) )
 
 	# cat("chi-sq",xsq$statistic,"\n")
@@ -160,24 +158,6 @@ oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 	cat(paste("   Somers' d:            ", format(round(somersd, digits=3), nsmall=3),"\n"))
 	cat(paste("   Kendall's tau-b:      ", format(round(taub, digits=3), nsmall=3),"\n"))
 	cat(paste("   Stuart's tau-c:       ",  format(round(tauc, digits=3), nsmall=3),"\n"))
-	#below is original output
-	#cat(paste("   Gamma:",
-	#          signif(gamma,.Options$digits),
-	#          "Standard error:",
-	#          signif(stdError,.Options$digits),
-	#          "\n\n"))
-
-	#cat(paste("   H0: gamma = 0 vs HA: two-sided\n"))
-	#cat(paste("   z:",
-	#          signif(z, .Options$digits),
-	#         "p-value:",
-	#          signif(2*(1-pnorm(abs(z))), .Options$digits),
-	#          "\n\n"))
-	#if(c<51 | d<51){
-	#  cat("Warning: p-values are based on a normal approximation to the\n")
-	#  cat("sampling distribution of the z test statistic, which is commonly\n")
-	#  cat("considered to be good only if C and D are both > 50.\n")
-	#}
 
 	invisible(NULL)
 }
