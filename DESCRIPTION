@@ -1,0 +1,14 @@
+Package: oii
+Title: Crosstab and statistical tests for OII MSc stats course
+Version: 0.0.0.9000
+Description: Provides simple crosstab output with optional statistics
+Authors@R: c(
+	person("Scott", "Hale", email = "scott.hale@oii.ox.ac.uk", role = c("aut", "cre")),
+	person("Jon", "Bright", email = "jonathan.bright@oii.ox.ac.uk", role = "aut"),
+	person("Grant", "Blank", email = "grant.blank@oii.ox.ac.uk", role = "aut"))
+Depends: R (>= 3.2.2)
+License: BSD
+LazyData: true
+Imports: rapport,
+    gmodels,
+    Deducer
