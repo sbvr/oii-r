@@ -19,46 +19,57 @@
 #
 ##########################################################
 
-oii_association_measures <- function(x,y=NULL,warnings=FALSE){
-	concordant <- function(x){ 
-		## get sum(matrix values > r AND > c) 
-		## for each matrix[r, c] 
-		mat.lr <- function(r,c){ 
-			lr <- x[(r.x > r) & (c.x > c)] 
-			sum(lr) 
-		} 
+#Internal use --- if x is not a table/matrix, then make x,y table
+makeTable<-function(x,y=NULL) {
+	tab<-x
+	if(!is.table(tab) & !is.matrix(tab)){
+		tab<-table(x,y)
+	}
+	tab
+}
 
-		## get row and column index for each 
-		## matrix element 
-		r.x <- row(x) 
-		c.x <- col(x) 
-
-		## return the sum of each matrix[r, c] * sums 
-		## using mapply to sequence thru each matrix[r, c] 
-		sum(x * mapply(mat.lr, r = r.x, c = c.x)) 
+concordant_pairs <- function(x,y=NULL){
+	x<-makeTable(x,y)
+	## get sum(matrix values > r AND > c) 
+	## for each matrix[r, c] 
+	mat.lr <- function(r,c){ 
+		lr <- x[(r.x > r) & (c.x > c)] 
+		sum(lr) 
 	} 
 
-	discordant <- function(x){ 
-		## get sum(matrix values > r AND < c) 
-		## for each matrix[r, c] 
-		mat.ll <- function(r,c){ 
-			ll <- x[(r.x > r) & (c.x < c)] 
-			sum(ll) 
-		} 
+	## get row and column index for each 
+	## matrix element 
+	r.x <- row(x) 
+	c.x <- col(x) 
 
-		## get row and column index for each 
-		## matrix element 
-		r.x <- row(x) 
-		c.x <- col(x) 
+	## return the sum of each matrix[r, c] * sums 
+	## using mapply to sequence thru each matrix[r, c] 
+	sum(x * mapply(mat.lr, r = r.x, c = c.x)) 
+}
 
-		## return the sum of each matrix[r, c] * sums 
-		## using mapply to sequence thru each matrix[r, c] 
-		sum(x * mapply(mat.ll, r = r.x, c = c.x)) 
+discordant_pairs <- function(x,y=NULL){
+	x<-makeTable(x,y)
+	## get sum(matrix values > r AND < c) 
+	## for each matrix[r, c] 
+	mat.ll <- function(r,c){ 
+		ll <- x[(r.x > r) & (c.x < c)] 
+		sum(ll) 
 	} 
 
-	# tied_both: choose 2 of every element in the matrix and sum the results
-	tied_both <- function(x) {sum(choose(x,2))}
+	## get row and column index for each 
+	## matrix element 
+	r.x <- row(x) 
+	c.x <- col(x) 
 
+	## return the sum of each matrix[r, c] * sums 
+	## using mapply to sequence thru each matrix[r, c] 
+	sum(x * mapply(mat.ll, r = r.x, c = c.x)) 
+} 
+
+# tied_both: choose 2 of every element in the matrix and sum the results
+tied_pairs <- function(x,y=NULL) {
+	tied_both<-function(x){sum(choose(x,2))}
+	
 	tied_first <- function(x){ 
 		mult<-function(r,c) {
 			#print(paste(r,c))
@@ -80,18 +91,29 @@ oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 		#print("----------------")
 		#print(tmp)
 		sum(tmp)
-	}       
-
-	tied_second<-function(x) {tied_first(t(x))} #transpose the matrix and run the same code as for first
-  
-	if(!is.table(x) & !is.matrix(x)){
-		x<-table(x,y)
 	}
-	c <- concordant(x) 
-	d <- discordant(x)
-	b <- tied_both(x)
-	f <- tied_first(x)
-	s <- tied_second(x)
+	
+	tab<-makeTable(x,y)
+	list(
+		both=tied_both(tab),
+		first=tied_first(tab),
+		#for tied_second, transpose the matrix and run the same code as tied_first
+		second=tied_first(t(tab))
+	)
+}
+
+
+
+oii_association_measures <- function(x,y=NULL,warnings=FALSE){
+	
+	x<-makeTable(x,y)
+  
+	c <- concordant_pairs(x) 
+	d <- discordant_pairs(x)
+	ties<-tied_pairs(x)
+	b <- ties$both
+	f <- ties$first
+	s <- ties$second
 	totp <- c + d + b + f + s
 	n <- sum(x)
 	m <- min(dim(x))
