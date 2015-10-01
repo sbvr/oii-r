@@ -7,10 +7,10 @@
 #' @param row Show row percentages? Defaults to FALSE
 #' @param col Show column percentages? Defaults to FALSE
 #' @param stats Print measures of association? Defaults to FALSE
-#' @param chicell Print Pearson chi-square for each cell? Defaults to FALSE
 #' @param chires cell chi-square residual, pearson
 #' @param chistd cell standardized chi-square residual, pearson
 #' @param chiexp expected cell chi-square, pearson
+#' @param ... Additional parameters to be passed to \code{\link{gmodels::CrossTable}}
 #' @param warnings a logical value indicating whether warnings should be shown (defaults to FALSE, no warnings).
 #' @export
 #' @seealso
@@ -37,13 +37,13 @@
 #' #or use the with(...) command to save some typing
 #' with(my.data.frame,oiixtab(x,y))
 #' 
-oii.xtab <-function(r, c, row=FALSE, col=FALSE, stats=FALSE, chicell=FALSE, chires=FALSE, 
-	chistd=FALSE, chiexp=FALSE, warnings=FALSE) {
+oii.xtab <-function(r, c, row=FALSE, col=FALSE, stats=FALSE, chires=FALSE, 
+	chistd=FALSE, chiexp=FALSE, warnings=FALSE, ...) {
 
 	#basic table with row percentages
 	gmodels::CrossTable(r, c, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
-		prop.chisq=chicell, prop.t=FALSE, resid=chires, sresid=chistd, expected=chiexp, 
-		format=c("SPSS"))
+		prop.t=FALSE, resid=chires, sresid=chistd, expected=chiexp, 
+		format=c("SPSS"), ...)
 
 	if(stats) {
 		tab <- xtabs(~r+c)
