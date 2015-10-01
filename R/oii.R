@@ -4,7 +4,7 @@
 #' MSc course at the Oxford Internet Institute, University of Oxford
 #'
 #' The only functions you're likely to need from \pkg{oii} are
-#' \code{\link{oiisummary}} and \code{\link{oiixtab}}.
+#' \code{\link{oii.summary}} and \code{\link{oii.xtab}}.
 #'
 #' @docType package
 #' @name oii

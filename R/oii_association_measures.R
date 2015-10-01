@@ -20,7 +20,7 @@
 ##########################################################
 
 #Internal use --- if x is not a table/matrix, then make x,y table
-makeTable<-function(x,y=NULL) {
+make.table<-function(x,y=NULL) {
 	tab<-x
 	if(!is.table(tab) & !is.matrix(tab)){
 		tab<-table(x,y)
@@ -28,8 +28,14 @@ makeTable<-function(x,y=NULL) {
 	tab
 }
 
-concordant_pairs <- function(x,y=NULL){
-	tab<-makeTable(x,y)
+#' The number of concordant pairs in a table or matrix
+#'
+#' @param x a table or matrix if \code{y} is NULL, or a numeric vector for the row variable
+#' @param y the column variable, a numeric vector used only when \code{x} is not a table or matrix.
+#' @return
+#' The number of concordant pairs
+concordant.pairs <- function(x,y=NULL){
+	tab<-make.table(x,y)
 	## get sum(matrix values > r AND > c) 
 	## for each matrix[r, c] 
 	mat.lr <- function(r,c){ 
@@ -47,8 +53,14 @@ concordant_pairs <- function(x,y=NULL){
 	sum(tab * mapply(mat.lr, r = r.x, c = c.x)) 
 }
 
-discordant_pairs <- function(x,y=NULL){
-	tab<-makeTable(x,y)
+#' The number of discordant pairs in a table or matrix
+#'
+#' @param x a table or matrix if \code{y} is NULL, or a numeric vector for the row variable
+#' @param y the column variable, a numeric vector used only when \code{x} is not a table or matrix.
+#' @return
+#' The number of discordant pairs
+discordant.pairs <- function(x,y=NULL){
+	tab<-make.table(x,y)
 	## get sum(matrix values > r AND < c) 
 	## for each matrix[r, c] 
 	mat.ll <- function(r,c){ 
@@ -66,11 +78,21 @@ discordant_pairs <- function(x,y=NULL){
 	sum(tab * mapply(mat.ll, r = r.x, c = c.x)) 
 } 
 
-# tied_both: choose 2 of every element in the matrix and sum the results
-tied_pairs <- function(x,y=NULL) {
-	tied_both<-function(tab){sum(choose(tab,2))}
+#' The number of tied pairs, a measure of association
+#'
+#' @param x a table or matrix if \code{y} is NULL, or a numeric vector for the first variable
+#' @param y the second variable, a numeric vector used only when \code{x} is not a table or matrix.
+#' @return
+#' A list with the following values:
+#'   \item{first}{The number of pairs tied on the first variable, but not both variables}
+#'   \item{second}{The number of pairs tied on the second variable, but not both variables}
+#'   \item{both}{The number of pairs tied on both the first and second variables}
+
+tied.pairs <- function(x,y=NULL) {
+	# tied_both: choose 2 of every element in the matrix and sum the results
+	tied.both<-function(tab){sum(choose(tab,2))}
 	
-	tied_first <- function(tab){ 
+	tied.first <- function(tab){ 
 		mult<-function(r,c) {
 			#print(paste(r,c))
 			#print((r.x > r) & (c.x == c))
@@ -93,20 +115,55 @@ tied_pairs <- function(x,y=NULL) {
 		sum(tmp)
 	}
 	
-	tab<-makeTable(x,y)
+	tab<-make.table(x,y)
 	list(
-		both=tied_both(tab),
-		first=tied_first(tab),
+		both=tied.both(tab),
+		first=tied.first(tab),
 		#for tied_second, transpose the matrix and run the same code as tied_first
-		second=tied_first(t(tab))
+		second=tied.first(t(tab))
 	)
 }
 
 
-
-oii_association_measures <- function(x,y=NULL,warnings=FALSE){
+#' Measures of association
+#'
+#' This function calculates basic measures of association
+#' @param x a table or matrix if \code{y} is NULL, or a numeric vector for the row variable
+#' @param y the column variable, a numeric vector used only when \code{x} is not a table or matrix.
+#' @param warnings a logical value indicating whether warnings should be shown (defaults to FALSE, no warnings).
+#' @return
+#' A list with the following elements is returned:
+#'   \item{phi}{Phi, a chi-square-based measures of association.}
+#'   \item{contingency_coefficient}{Contingency coefficient, a chi-square-based measures of association.}
+#'   \item{cramersv}{Cramer's V, a chi-square-based measures of association.}
+#'   \item{pairs_total}{Total number of pairs}
+#'   \item{pairs_concordant}{Number of concordant pairs}
+#'   \item{pairs_discordant}{Number of discordant pairs}
+#'   \item{pairs_tied_first}{The number of pairs tied on the first variable (but not both variables)}
+#'   \item{pairs_tied_second}{The number of pairs tied on the second variable (but not both variables)}
+#'   \item{pairs_tied_both}{The number of pairs tied on both the first and second variables}
+#'   \item{minimum_dim}{Minimum dimension of \code{x} and \code{y}}
+#'   \item{n}{Number of cases}
+#'   \item{gamma}{Goodman-Kruskal Gamma}
+#'   \item{somersd}{Somers' d}
+#'   \item{taub}{Kendall's tau-b}
+#'   \item{tauc}{Stuart's tau-c}
+#' @export
+#' @seealso
+#' \code{\link{oiixtab}}, \code{\link{Deducer::likelihood.test}}, \code{\link{rapport::lambda.test}},
+#' \code{\link{concordant.pairs}}, \code{\link{discordant.pairs}}, \code{\link{tied.pairs}}
+#' 
+#' @examples
+#' #Create var1 as 200 A's, B's, and C's
+#' var1<-sample(LETTERS[1:3],size=200,replace=TRUE)
+#' #Create var2 as 200 numbers in the range 1 to 4
+#' var2<-sample(1:4,size=200,replace=TRUE)
+#'
+#' #Print a simple cross tab of var1 and var2
+#' association.measures(var1,var2)
+association.measures <- function(x,y=NULL,warnings=FALSE){
 	
-	tab<-makeTable(x,y)
+	tab<-make.table(x,y)
   
 	c <- concordant_pairs(tab) 
 	d <- discordant_pairs(tab)
@@ -156,11 +213,11 @@ oii_association_measures <- function(x,y=NULL,warnings=FALSE){
 		taub=taub,
 		tauc=tauc
 	)
-	class(vals)<-"oii_association_measures"
+	class(vals)<-"oii.association.measures"
 	vals
 }
 
-print.oii_association_measures<-function(vals) {
+print.oii.association.measures<-function(vals) {
 cat("Chi-square-based measures of association:\n")
 	cat(paste("   Phi:                     ", format(round(vals$phi, digits=3), nsmall=3),"\n"))
 	cat(paste("   Contingency coefficient: ", format(round(vals$contingency_coefficient, digits=3), nsmall=3),"\n"))
@@ -171,7 +228,7 @@ cat("Chi-square-based measures of association:\n")
 	cat(paste("   Total number of pairs:  ",vals$pairs_toal,"\n"))
 	cat(paste("   Concordant pairs:       ",vals$pairs_concordant,"\n"))
 	cat(paste("   Discordant pairs:       ",vals$pairs_discordant,"\n"))
-	cat(paste("   Tied on first Variable: ",vals$pairs_tied_first,"\n"))
+	cat(paste("   Tied on first variable: ",vals$pairs_tied_first,"\n"))
 	cat(paste("   Tied on second variable:",vals$pairs_tied_second,"\n"))
 	cat(paste("   Tied on both variables: ",vals$pairs_tied_both,"\n\n"))
 	cat(paste("   Minimum Dimension:",vals$minimum_dim,"\n"))
