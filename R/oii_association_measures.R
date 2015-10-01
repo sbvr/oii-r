@@ -165,9 +165,9 @@ association.measures <- function(x,y=NULL,warnings=FALSE){
 	
 	tab<-make.table(x,y)
   
-	c <- concordant_pairs(tab) 
-	d <- discordant_pairs(tab)
-	ties<-tied_pairs(tab)
+	c <- concordant.pairs(tab) 
+	d <- discordant.pairs(tab)
+	ties<-tied.pairs(tab)
 	b <- ties$both
 	f <- ties$first
 	s <- ties$second
