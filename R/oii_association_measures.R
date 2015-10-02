@@ -34,6 +34,9 @@ make.table<-function(x,y=NULL) {
 #' @param y the column variable, a numeric vector used only when \code{x} is not a table or matrix.
 #' @return
 #' The number of concordant pairs
+#' @export
+#' @seealso
+#' \code{\link{association.measures}}, \code{\link{discordant.pairs}}, \code{\link{tied.pairs}}
 concordant.pairs <- function(x,y=NULL){
 	tab<-make.table(x,y)
 	## get sum(matrix values > r AND > c) 
@@ -59,6 +62,9 @@ concordant.pairs <- function(x,y=NULL){
 #' @param y the column variable, a numeric vector used only when \code{x} is not a table or matrix.
 #' @return
 #' The number of discordant pairs
+#' @export
+#' @seealso
+#' \code{\link{association.measures}}, \code{\link{concordant.pairs}}, \code{\link{tied.pairs}}
 discordant.pairs <- function(x,y=NULL){
 	tab<-make.table(x,y)
 	## get sum(matrix values > r AND < c) 
@@ -87,7 +93,9 @@ discordant.pairs <- function(x,y=NULL){
 #'   \item{first}{The number of pairs tied on the first variable, but not both variables}
 #'   \item{second}{The number of pairs tied on the second variable, but not both variables}
 #'   \item{both}{The number of pairs tied on both the first and second variables}
-
+#' @export
+#' @seealso
+#' \code{\link{association.measures}}, \code{\link{concordant.pairs}}, \code{\link{discordant.pairs}}
 tied.pairs <- function(x,y=NULL) {
 	# tied_both: choose 2 of every element in the matrix and sum the results
 	tied.both<-function(tab){sum(choose(tab,2))}
