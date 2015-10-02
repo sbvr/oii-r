@@ -150,7 +150,7 @@ tied.pairs <- function(x,y=NULL) {
 #'   \item{tauc}{Stuart's tau-c}
 #' @export
 #' @seealso
-#' \code{\link{oiixtab}}, \code{\link{Deducer::likelihood.test}}, \code{\link{rapport::lambda.test}},
+#' \code{\link{oii.xtab}}, \code{\link[Deducer]{likelihood.test}}, \code{\link[rapport]{lambda.test}},
 #' \code{\link{concordant.pairs}}, \code{\link{discordant.pairs}}, \code{\link{tied.pairs}}
 #' 
 #' @examples

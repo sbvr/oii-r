@@ -3,4 +3,3 @@
 export(association.measures)
 export(oii.summary)
 export(oii.xtab)
-export(xtab)

@@ -32,7 +32,7 @@
 #' tmp<-rnorm(500,mean=0,sd=1)
 #'
 #' #Print the summary statistics about tmp
-#' oiisummary(tmp)
+#' oii.summary(tmp)
 
 oii.summary<-function(x,extended=FALSE,warnings=FALSE) {
 	if (!is.numeric(x)) {
