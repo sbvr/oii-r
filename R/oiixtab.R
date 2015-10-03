@@ -1,15 +1,16 @@
 #' A cross-tabulation with measures of association
 #'
-#' This function prints a simple cross-tabulation
-#' and, optionally, various measures of association
-#' @param r the row variable, a numeric vector
-#' @param c the column variable, a numeric vector
+#' This function prints a 2-way table with optional cell statistics 
+#' and measures of association
+#' @param r the row variable
+#' @param c the column variable
 #' @param row Show row percentages? Defaults to FALSE
 #' @param col Show column percentages? Defaults to FALSE
 #' @param stats Print measures of association? Defaults to FALSE
-#' @param chires cell chi-square residual, pearson
-#' @param chistd cell standardized chi-square residual, pearson
-#' @param chiexp expected cell chi-square, pearson
+#' @param expcell Print expected cell count under the null hypothesis? Defaults to FALSE
+#' @param rescell Print residual cell count under the null hypothesis?  Defaults to FALSE
+#' @param pctcell Print cell percentages? Defaults to FALSE
+#' @param chicell Print cell contribution to pearson chi-square? Defaults to FALSE
 #' @param ... Additional parameters to be passed to \code{\link[gmodels]{CrossTable}}
 #' @param warnings a logical value indicating whether warnings should be shown (defaults to FALSE, no warnings).
 #' @export
@@ -21,7 +22,7 @@
 #' #Create var2 as 200 numbers in the range 1 to 4
 #' var2<-sample(1:4,size=200,replace=TRUE)
 #'
-#' #Print a simple cross tab of var1 and var2
+#' #Print a simple 2-way table of var1 and var2
 #' oii.xtab(var1,var2)
 #'
 #' #Print the row and column percents
@@ -37,13 +38,13 @@
 #' #or use the with(...) command to save some typing
 #' with(my.data.frame,oii.xtab(x,y))
 #' 
-oii.xtab <-function(r, c, row=FALSE, col=FALSE, stats=FALSE, chires=FALSE, 
-	chistd=FALSE, chiexp=FALSE, warnings=FALSE, ...) {
+oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, rescell=FALSE, 
+	chistd=FALSE, expcell=FALSE, chicell=FALSE, warnings=FALSE, ...) {
 
 	#basic table with row percentages
 	gmodels::CrossTable(r, c, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
-		prop.t=FALSE, resid=chires, sresid=chistd, expected=chiexp, 
-		format=c("SPSS"), ...)
+		prop.t=pctcell, resid=rescell, sresid=chistd, expected=expcell, prop.chisq=chicell,
+		chisq=FALSE, format=c("SPSS"), ...)
 
 	if(stats) {
 		tab <- xtabs(~r+c)

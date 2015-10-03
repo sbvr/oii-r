@@ -93,6 +93,7 @@ discordant.pairs <- function(x,y=NULL){
 #'   \item{first}{The number of pairs tied on the first variable, but not both variables}
 #'   \item{second}{The number of pairs tied on the second variable, but not both variables}
 #'   \item{both}{The number of pairs tied on both the first and second variables}
+
 #' @export
 #' @seealso
 #' \code{\link{association.measures}}, \code{\link{concordant.pairs}}, \code{\link{discordant.pairs}}
@@ -239,8 +240,8 @@ cat("Chi-square-based measures of association:\n")
 	cat(paste("   Tied on first variable: ",vals$pairs_tied_first,"\n"))
 	cat(paste("   Tied on second variable:",vals$pairs_tied_second,"\n"))
 	cat(paste("   Tied on both variables: ",vals$pairs_tied_both,"\n\n"))
-	cat(paste("   Minimum Dimension:",vals$minimum_dim,"\n"))
-	cat(paste("   Total N:",vals$n,"\n"))
+#	cat(paste("   Minimum Dimension:",vals$minimum_dim,"\n"))
+#	cat(paste("   Total N:",vals$n,"\n"))
 	cat(paste("   Goodman-Kruskal Gamma:", format(round(vals$gamma, digits=3), nsmall=3),"\n"))
 	cat(paste("   Somers' d:            ", format(round(vals$somersd, digits=3), nsmall=3),"\n"))
 	cat(paste("   Kendall's tau-b:      ", format(round(vals$taub, digits=3), nsmall=3),"\n"))
