@@ -11,6 +11,7 @@
 #' @param rescell Print residual cell count under the null hypothesis?  Defaults to FALSE
 #' @param pctcell Print cell percentages? Defaults to FALSE
 #' @param chicell Print cell contribution to pearson chi-square? Defaults to FALSE
+#' @param chistd Print cell standardized residuals to pearson chi-square? Defaults to FALSE
 #' @param ... Additional parameters to be passed to \code{\link[gmodels]{CrossTable}}
 #' @param warnings a logical value indicating whether warnings should be shown (defaults to FALSE, no warnings).
 #' @export
@@ -62,6 +63,7 @@ oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, resc
 			"\n" )
 
 		#Likelihood Ratio Chi Squared
+		options(DeducerNoGUI=TRUE) #Do not try to add menus
 		chilr=Deducer::likelihood.test(r,c)
 		cat("Likelihood ratio chi-square:", format(round(chilr$statistic, digits=3), nsmall=3), 
 			" df:", chilr$parameter, 
