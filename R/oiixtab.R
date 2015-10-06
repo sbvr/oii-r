@@ -48,7 +48,7 @@ oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, resc
 	#basic table with row percentages
 	gmodels::CrossTable(r, c, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
 		prop.t=pctcell, resid=rescell, sresid=chistd, expected=expcell, prop.chisq=chicell,
-		chisq=FALSE, format=c("SPSS"), ...)
+		chisq=stats, format=c("SPSS"), ...)
 
 	if(stats) {
 		tab <- xtabs(~r+c)
@@ -60,10 +60,10 @@ oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, resc
 			chip <- chisq.test(tab)
 		}
       
-		cat("Pearson chi-square:         ", format(round(chip$statistic, digits=3), nsmall=3), 
-			" df:", chip$parameter, 
-			" p-value:", format(round(chip$p.value, digits=3), nsmall=3),
-			"\n" )
+		#cat("Pearson chi-square:         ", format(round(chip$statistic, digits=3), nsmall=3), 
+		#	" df:", chip$parameter, 
+		#	" p-value:", format(round(chip$p.value, digits=3), nsmall=3),
+		#	"\n" )
 
 		#Likelihood Ratio Chi Squared
 		options(DeducerNoGUI=TRUE) #Do not try to add menus
@@ -73,7 +73,7 @@ oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, resc
 			" p-value:", format(round(chilr$p.value, digits=3), nsmall=3),
 			"\n\n")
 
-		#chi-sq stats and ordinal stats
+		#Ordinal measures of association
 		print(association.measures(tab))
 
 
