@@ -41,6 +41,9 @@
 #' 
 oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, rescell=FALSE, 
 	chistd=FALSE, expcell=FALSE, chicell=FALSE, warnings=FALSE, ...) {
+	
+	deparse(substitute(r))
+	cat("\nCross-tabulation of", deparse(substitute(r)), "(rows) and", deparse(substitute(c)),"(cols)\n")
 
 	#basic table with row percentages
 	gmodels::CrossTable(r, c, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,

@@ -43,7 +43,15 @@ oii.freq<-function(x) {
 	valid_percent<-c(valid_percent,sum(valid_percent),NA,NA)
 	cum_percent<-c(cum_percent,NA,NA,NA)
 	
-	data.frame(freq=freq,percent=percent,valid_percent=valid_percent,cum_percent=cum_percent,row.names=names)
+	ret<-data.frame(freq=freq,percent=percent,valid_percent=valid_percent,cum_percent=cum_percent,row.names=names)
+	class(ret)<-c("oiifreq","data.frame")
+	attr(ret,"varname")<-deparse(substitute(x))
+	return(ret)
+}
 
-
+#' @export
+print.oiifreq<-function(x,...) {
+	cat("\nFrequencies for ",attr(x,"varname"),":\n")
+	print.data.frame(x)
+	cat("\n")
 }
