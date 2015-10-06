@@ -65,24 +65,26 @@ oii.summary.stats<-function(x,extended=FALSE) {
 	return(vals)
 }
 
-print.oiisummary<-function(vals,digits=3) {
-	cat("Valid N:        ",vals$cases,"\n")  
-	cat("Missing (NA's): ",vals$na,"\n")	
-	cat("Mean:           ",format(round(vals$mean,digits),nsmall=digits),"\n")
-	cat("SD:             ",format(round(vals$sd,digits),nsmall=digits),"\n")	
-	cat("Min.:           ",format(round(vals$min,digits),nsmall=digits),"\n")
-	cat("Max.:           ",format(round(vals$max,digits),nsmall=digits),"\n")
+#' @export
+print.oiisummary<-function(x,...,digits=3) {
+	cat("Valid N:        ",x$cases,"\n")  
+	cat("Missing (NA's): ",x$na,"\n")	
+	cat("Mean:           ",format(round(x$mean,digits),nsmall=digits),"\n")
+	cat("SD:             ",format(round(x$sd,digits),nsmall=digits),"\n")	
+	cat("Min.:           ",format(round(x$min,digits),nsmall=digits),"\n")
+	cat("Max.:           ",format(round(x$max,digits),nsmall=digits),"\n")
 }
 
-print.oiisummaryextended<-function(vals,digits=3) {
-	cat("Valid N:        ",vals$cases,"\n")  
-	cat("Missing (NA's): ",vals$na,"\n")	
-	cat("Mean:           ",format(round(vals$mean,digits),nsmall=digits),"\n")
-	cat("SD:             ",format(round(vals$sd,digits),nsmall=digits),"\n")	
-	cat("Min.:           ",format(round(vals$min,digits),nsmall=digits),"\n")
-	cat("25th percentile:",format(round(vals$p25,digits),nsmall=digits),"\n")
-	cat("Median:         ",format(round(vals$median,digits),nsmall=digits),"\n")
-	cat("75th percentile:",format(round(vals$p75,digits),nsmall=digits),"\n")
-	cat("Max.:           ",format(round(vals$max,digits),nsmall=digits),"\n")
+#' @export
+print.oiisummaryextended<-function(x,...,digits=3) {
+	cat("Valid N:        ",x$cases,"\n")  
+	cat("Missing (NA's): ",x$na,"\n")	
+	cat("Mean:           ",format(round(x$mean,digits),nsmall=digits),"\n")
+	cat("SD:             ",format(round(x$sd,digits),nsmall=digits),"\n")	
+	cat("Min.:           ",format(round(x$min,digits),nsmall=digits),"\n")
+	cat("25th percentile:",format(round(x$p25,digits),nsmall=digits),"\n")
+	cat("Median:         ",format(round(x$median,digits),nsmall=digits),"\n")
+	cat("75th percentile:",format(round(x$p75,digits),nsmall=digits),"\n")
+	cat("Max.:           ",format(round(x$max,digits),nsmall=digits),"\n")
 }
 
