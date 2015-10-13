@@ -39,7 +39,7 @@ oii.freq<-function(x) {
 	cum_percent<-cumsum(valid_percent)
 	
 	freq<-c(freq,n,isna,n+isna)
-	percent<-c(percent,sum(percent),round(isna/length(x),2),100)
+	percent<-c(percent,sum(percent),round(isna/length(x)*100,2),100)
 	valid_percent<-c(valid_percent,sum(valid_percent),NA,NA)
 	cum_percent<-c(cum_percent,NA,NA,NA)
 	
