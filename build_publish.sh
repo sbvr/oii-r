@@ -5,10 +5,11 @@ cd oii-r
 git checkout --orphan gh-pages
 git rm --cached -r *
 git rm --cached .Rbuildignore .gitignore
-#TODO: generate documentation
+rm -rf *.tar.gz
+echo "devtools::document()" | R --no-save
 R CMD build .
 mv oii_*.tar.gz oii.tar.gz
 R CMD check oii.tar.gz
 git add oii.tar.gz
-git commit -m "v1.0"
+git commit -m "Generated on `date`"
 git push -f origin gh-pages
