@@ -22,7 +22,12 @@
 #Internal use --- if x is not a table/matrix, then make x,y table
 make.table<-function(x,y=NULL) {
 	tab<-x
-	if(!is.table(tab) & !is.matrix(tab)){
+	if (is.data.frame(x)) {
+		if (length(x)>2) {
+			warning("Input is a data.frame with more than two variables. Only the first two variables will be used.")
+		}
+		tab<-table(x[,1],x[,2])
+	} else if(!is.table(tab) & !is.matrix(tab)){
 		tab<-table(x,y)
 	}
 	tab

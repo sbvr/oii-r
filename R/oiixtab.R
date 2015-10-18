@@ -39,19 +39,24 @@
 #' #or use the with(...) command to save some typing
 #' with(my.data.frame,oii.xtab(x,y))
 #' 
-oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, rescell=FALSE, 
+oii.xtab <-function(r, c=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, rescell=FALSE, 
 	chistd=FALSE, expcell=FALSE, chicell=FALSE, warnings=FALSE, ...) {
 	
-	deparse(substitute(r))
-	cat("\nCross-tabulation of", deparse(substitute(r)), "(rows) and", deparse(substitute(c)),"(cols)\n")
+	if (is.null(c)) {
+		cat("\nCross-tabulation of", deparse(substitute(r)), "\n")
+	} else {
+		cat("\nCross-tabulation of", deparse(substitute(r)), "(rows) and", deparse(substitute(c)),"(cols)\n")
+	}
+	
+	tab<-make.table(r,c)
 
 	#basic table with row percentages
-	gmodels::CrossTable(r, c, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
+	gmodels::CrossTable(tab, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
 		prop.t=pctcell, resid=rescell, sresid=chistd, expected=expcell, prop.chisq=chicell,
 		chisq=stats, format=c("SPSS"), ...)
 
 	if(stats) {
-		tab <- xtabs(~r+c)
+		#tab <- xtabs(~r+c)
 
       #Pearson chi squared
 		if (!warnings) {
@@ -67,7 +72,7 @@ oii.xtab <-function(r, c, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, resc
 
 		#Likelihood Ratio Chi Squared
 		options(DeducerNoGUI=TRUE) #Do not try to add menus
-		chilr=Deducer::likelihood.test(r,c)
+		chilr=Deducer::likelihood.test(tab)
 		cat("Likelihood ratio chi-square:", format(round(chilr$statistic, digits=3), nsmall=3), 
 			" df:", chilr$parameter, 
 			" p-value:", format(round(chilr$p.value, digits=3), nsmall=3),
