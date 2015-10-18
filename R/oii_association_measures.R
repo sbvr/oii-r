@@ -53,7 +53,7 @@ concordant.pairs <- function(x,y=NULL){
 
 	## return the sum of each matrix[r, c] * sums 
 	## using mapply to sequence thru each matrix[r, c] 
-	sum(tab * mapply(mat.lr, r = r.x, c = c.x)) 
+	as.numeric(sum(tab * mapply(mat.lr, r = r.x, c = c.x)))
 }
 
 #' The number of discordant pairs in a table or matrix
@@ -81,7 +81,7 @@ discordant.pairs <- function(x,y=NULL){
 
 	## return the sum of each matrix[r, c] * sums 
 	## using mapply to sequence thru each matrix[r, c] 
-	sum(tab * mapply(mat.ll, r = r.x, c = c.x)) 
+	as.numeric(sum(tab * mapply(mat.ll, r = r.x, c = c.x)))
 } 
 
 #' The number of tied pairs, a measure of association
@@ -98,6 +98,7 @@ discordant.pairs <- function(x,y=NULL){
 #' @seealso
 #' \code{\link{association.measures}}, \code{\link{concordant.pairs}}, \code{\link{discordant.pairs}}
 tied.pairs <- function(x,y=NULL) {
+	
 	# tied_both: choose 2 of every element in the matrix and sum the results
 	tied.both<-function(tab){sum(choose(tab,2))}
 	
@@ -112,16 +113,11 @@ tied.pairs <- function(x,y=NULL) {
 
 		r.x <- row(tab) 
 		c.x <- col(tab) 
-		#cat("r.x: ",r.x,"\n")
-		#cat("c.x: ",c.x,"\n")
-
-		## return the sum of each matrix[r, c] * sums 
-		## using mapply to sequence thru each matrix[r, c] 
 
 		tmp<-(mapply(mult, r = r.x, c = c.x))
 		#print("----------------")
 		#print(tmp)
-		sum(tmp)
+		sum(as.numeric(tmp)) #Make sure we have doubles to avoid integer overflow
 	}
 	
 	tab<-make.table(x,y)
