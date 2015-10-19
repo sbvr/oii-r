@@ -84,7 +84,7 @@ oii.xtab <-function(r, c=NULL, s=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stat
 		cat("\nCross-tabulation of", varnames[1], "(rows) and", varnames[2],"(cols)\n")
 	}
 	
-	tab<-make.table(r,c)
+	tab<-make.table(r,c,exclude=TRUE)
 
 	#basic table with row percentages
 	gmodels::CrossTable(tab, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
