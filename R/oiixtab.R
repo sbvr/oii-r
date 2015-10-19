@@ -13,6 +13,7 @@
 #' @param pctcell Print cell percentages? Defaults to FALSE.
 #' @param chicell Print cell contribution to pearson chi-square? Defaults to FALSE.
 #' @param chistd Print cell standardized residuals to pearson chi-square? Defaults to FALSE.
+#' @param varnames Names used to refer to \code{r}, \code{c}, and \code{s} in the printed output.
 #' @param ... Additional parameters to be passed to \code{\link[gmodels]{CrossTable}}.
 #' @param warnings a logical value indicating whether warnings should be shown (defaults to FALSE, no warnings).
 #' @export
@@ -34,30 +35,37 @@
 #' oii.xtab(var1,var2,stats=TRUE)
 #'
 #' #If the variables are part of a data.frame
-#' my.data.frame<-data.frame(x=var1,y=var2)
+#' my.data.frame<-data.frame(var1,var2)
 #' #We can use the $ to get the variables
-#' oii.xtab(my.data.frame$x,my.data.frame$y)
+#' oii.xtab(my.data.frame$var1,my.data.frame$var2)
 #' #or use the with(...) command to save some typing
-#' with(my.data.frame,oii.xtab(x,y))
+#' with(my.data.frame,oii.xtab(var1,var2))
 #' 
 #' #Three-way tables are also possible
-#' #Create var3 as 200 x's, y's, and z's
-#' var3<-var1<-sample(letters[24:26],size=200,replace=TRUE)
+#' #Create var3 as 200 "I"'s, "II"'s, and "III"'s
+#' var3<-sample(c("I","II","III"),size=200,replace=TRUE)
 #' oii.xtab(var1,var2,var3)
 #'
 #' #We can also pass in a data.frame directly as the first argument
-#' my.data.frame<-data.frame(x=var1,y=var2,z=var3)
+#' my.data.frame<-data.frame(var1,var2,var3)
 #' oii.xtab(my.data.frame,stats=TRUE)
-#' #The variables in the data.frame are used in order; so, sometimes it is useful to re-order them. For example,
+#' #The variables in the data.frame are used in order;
+#' #so, sometimes it is useful to re-order them. For example,
 #' oii.xtab(my.data.frame[,c("var3","var1","var2")],stats=TRUE)
-#' #Of course, it is also possible to pass in the variables one at a time or use with(...) as shown above.
+#' #Of course, it is also possible to pass in the variables one 
+#' #at a time or use with(...) as shown above.
 #' 
 oii.xtab <-function(r, c=NULL, s=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stats=FALSE, rescell=FALSE, 
 	chistd=FALSE, expcell=FALSE, chicell=FALSE, warnings=FALSE, varnames=NULL, ...) {
 
 	if (is.null(varnames)) {
-		varnames<-c(deparse(substitute(r)),deparse(substitute(c)),deparse(substitute(s)))
+		if (is.data.frame(r)) {
+			varnames<-names(r)
+		} else {
+			varnames<-c(deparse(substitute(r)),deparse(substitute(c)),deparse(substitute(s)))
+		}
 	}
+
 	#3-way tables
 	if (!is.null(s) & !is.null(c)) {
 		#Three variables passed separately
