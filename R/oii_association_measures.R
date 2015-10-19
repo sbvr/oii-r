@@ -20,15 +20,15 @@
 ##########################################################
 
 #Internal use --- if x is not a table/matrix, then make x,y table
-make.table<-function(x,y=NULL) {
-	tab<-x
-	if (is.data.frame(x)) {
-		if (length(x)>2) {
+make.table<-function(r,c=NULL) {
+	tab<-r
+	if (is.data.frame(r)) {
+		if (length(r)>2) {
 			warning("Input is a data.frame with more than two variables. Only the first two variables will be used.")
 		}
-		tab<-table(x[,1],x[,2])
+		tab<-table(r[,1],r[,2])
 	} else if(!is.table(tab) & !is.matrix(tab)){
-		tab<-table(x,y)
+		tab<-table(r,c)
 	}
 	tab
 }
