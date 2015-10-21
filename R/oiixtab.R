@@ -116,7 +116,10 @@ oii.xtab <-function(r, c=NULL, s=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stat
 
 		#Likelihood Ratio Chi Squared
 		options(DeducerNoGUI=TRUE) #Do not try to add menus
-		chilr=Deducer::likelihood.test(tab)
+		chilr<-tryCatch(Deducer::likelihood.test(tab), error = function(e) {
+			if (warnings) warning(e)
+			list(statistic=NaN,parameter=NaN,p.value=NaN)
+		})
 		cat("Likelihood ratio chi-square:", format(round(chilr$statistic, digits=3), nsmall=3), 
 			" df:", chilr$parameter, 
 			" p-value:", format(round(chilr$p.value, digits=3), nsmall=3),
