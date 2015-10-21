@@ -7,7 +7,7 @@
 #' @param s the split variable. The \code{r} and \code{c} will be separately tabulated for each unique value of \code{s}.
 #' @param row Show row percentages? Defaults to FALSE.
 #' @param col Show column percentages? Defaults to FALSE.
-#' @param stats Print measures of association? Defaults to FALSE. See \code{\link{association.measures}}.
+#' @param stats Print measures of association? Defaults to FALSE. This parameter is ignored either \code{r} or \code{c} has only one value. See \code{\link{association.measures}}.
 #' @param expcell Print expected cell count under the null hypothesis? Defaults to FALSE.
 #' @param rescell Print residual cell count under the null hypothesis?  Defaults to FALSE.
 #' @param pctcell Print cell percentages? Defaults to FALSE.
@@ -93,6 +93,9 @@ oii.xtab <-function(r, c=NULL, s=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stat
 	}
 	
 	tab<-make.table(r,c,exclude=TRUE)
+	
+	#If either r or c has only one level, then we will not compute statistics.
+	stats<-stats & !any(dim(tab)<2)
 
 	#basic table with row percentages
 	gmodels::CrossTable(tab, missing.include=FALSE, prop.c=col, prop.r=row, digits=2,
