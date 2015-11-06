@@ -253,7 +253,7 @@ cat("Chi-square-based measures of association:\n")
 #	cat(paste("   Minimum Dimension:",x$minimum_dim,"\n"))
 #	cat(paste("   Total N:",x$n,"\n"))
 	cat(paste("   Goodman-Kruskal Gamma:", format(round(x$gamma, digits=3), nsmall=3),"\n"))
-	cat(paste("   Somers' d:            ", format(round(x$somersd, digits=3), nsmall=3),"\n"))
+	cat(paste("   Somers' d (row dep.): ", format(round(x$somersd, digits=3), nsmall=3),"\n"))
 	cat(paste("   Kendall's tau-b:      ", format(round(x$taub, digits=3), nsmall=3),"\n"))
 	cat(paste("   Stuart's tau-c:       ",  format(round(x$tauc, digits=3), nsmall=3),"\n"))
 }
