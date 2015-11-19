@@ -80,7 +80,11 @@ oii.xtab <-function(r, c=NULL, s=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stat
 			cat(paste(rep("-",options("width")),collapse=""),"\n")
 			cat(varnames[3],":",l,"\n")
 			df<-dfs[[l]]
-			oii.xtab(df[,1:2],row=row,col=col,pctcell=pctcell,stats=stats,rescell=rescell,chistd=chistd,expcell=expcell,chicell=chicell,warnings=warnings,varnames=varnames,...)
+			if (nrow(df)>0) {
+				oii.xtab(df[,1:2],row=row,col=col,pctcell=pctcell,stats=stats,rescell=rescell,chistd=chistd,expcell=expcell,chicell=chicell,warnings=warnings,varnames=varnames,...)
+			} else {
+				cat("Level",l," has no data.\n")
+			}
 		}
 		return(invisible(NULL))
 	}
