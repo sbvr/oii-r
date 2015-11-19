@@ -163,7 +163,7 @@ tied.pairs <- function(x,y=NULL) {
 #'   \item{minimum_dim}{Minimum dimension of \code{x} and \code{y}}
 #'   \item{n}{Number of cases}
 #'   \item{gamma}{Goodman-Kruskal Gamma}
-#'   \item{somersd}{Somers' d}
+#'   \item{somersd}{Somers' d (assuming the column variable is the dependent variable)}
 #'   \item{taub}{Kendall's tau-b}
 #'   \item{tauc}{Stuart's tau-c}
 #' @export
