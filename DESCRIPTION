@@ -9,6 +9,6 @@ Authors@R: c(
 Depends: R (>= 3.2.1)
 License: MIT + file LICENSE
 LazyData: true
-Imports: rapport,
+Imports: rapportools,
     gmodels,
     Deducer

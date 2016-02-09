@@ -62,8 +62,8 @@ oii.summary.stats<-function(x,extended=FALSE) {
 		p25=quantiles["25%"],
 		p75=quantiles["75%"],
 		sd=sd(x,na.rm=TRUE),
-		skewness=rapport::skewness(x, na.rm=TRUE),
-		kurtosis=rapport::kurtosis(x, na.rm=TRUE),
+		skewness=rapportools::skewness(x, na.rm=TRUE),
+		kurtosis=rapportools::kurtosis(x, na.rm=TRUE),
 		var=var(x,na.rm=TRUE)
 	)
 	if (extended) {
