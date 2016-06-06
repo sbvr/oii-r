@@ -18,7 +18,7 @@
 #' @param warnings a logical value indicating whether warnings should be shown (defaults to FALSE, no warnings).
 #' @export
 #' @seealso
-#' \code{\link{association.measures}}, \code{\link[gmodels]{CrossTable}}, \code{\link[Deducer]{likelihood.test}}, \code{\link[rapport]{lambda.test}}
+#' \code{\link{association.measures}}, \code{\link[gmodels]{CrossTable}}, \code{\link[Deducer]{likelihood.test}}, \code{\link[rapportools]{lambda.test}}
 #' @examples
 #' #Create var1 as 200 A's, B's, and C's
 #' var1<-sample(LETTERS[1:3],size=200,replace=TRUE)
@@ -138,7 +138,7 @@ oii.xtab <-function(r, c=NULL, s=NULL, row=FALSE, col=FALSE, pctcell=FALSE, stat
 
 		#Goodman Kruskal Lambda
 		cat(paste0("\n","Goodman-Kruskal Lambda:\n"))
-		ll = rapport::lambda.test(tab)
+		ll = rapportools::lambda.test(tab)
 		cat("     Row dependent:", format(round(ll$col, digits=3), nsmall=3), "\n")
 		cat("  Column dependent:", format(round(ll$row, digits=3), nsmall=3), "\n")
 		cat("\n")
